@@ -5,10 +5,10 @@ import configparser
 import os
 import re
 import typing
-from typing import Any, Dict, List, Optional, TypedDict
+from typing import Any, Dict, List, Optional, Tuple, TypedDict, Union
+from typing_extensions import Unpack
 
 __version__ = '0.2.0'
-
 
 
 class ConfigValueError(Exception):
@@ -119,13 +119,16 @@ class ArgparseReader(ReaderBase):
                         .format(section, key))
 
 
+Dictionary = Dict[str, Dict[str, Any]]
+
+
 class DictionaryReader(ReaderBase):
     """Useful for default values.
 
     :param dictionary: A nested dictionary.
     """
 
-    def __init__(self, dictionary: Dict[str, Any]):
+    def __init__(self, dictionary: Dictionary):
         self._dictionary = dictionary
 
     def get(self, section: str, key: str) -> typing.Any:
@@ -323,23 +326,35 @@ class ClassInterface:
         return ClassInterfaceKey(self._reader, section=name)
 
 
-def load_readers_by_keyword(**kwargs: Any) -> List[ReaderBase]:
+class ReadersKwarg(TypedDict):
+
+    argparse: Union[Tuple[argparse.Namespace, Mapping], argparse.Namespace]
+    """A tuple `(args, mapping)`.
+      `args`: The parsed `argparse` object (Namespace).
+      `mapping`: A dictionary like this one: `{'section.key': 'dest'}`. `dest`
+      are the propertiy name of the `args` object.
+      or only the `argparse` object (Namespace)."""
+
+    dictionary: int
+    """ A two dimensional nested dictionary
+      `{'section': {'key': 'value'}}`"""
+
+    environ: str
+    """The prefix of the environment variables."""
+
+    ini: str
+    """The path of the INI file."""
+
+    spec: Spec
+
+
+def load_readers_by_keyword(**kwargs: Unpack[ReadersKwarg]) -> List[ReaderBase]:
     """Available readers: `argparse`, `dictionary`, `environ`, `ini`.
 
     The arguments of this class have to be specified as keyword arguments.
     Each keyword stands for a configuration reader class.
     The order of the keywords is important. The first keyword, more
     specifically the first reader class, overwrites the next ones.
-
-    :param tuple argparse: A tuple `(args, mapping)`.
-      `args`: The parsed `argparse` object (Namespace).
-      `mapping`: A dictionary like this one: `{'section.key': 'dest'}`. `dest`
-      are the propertiy name of the `args` object.
-      or only the `argparse` object (Namespace).
-    :param dict dictonary: A two dimensional nested dictionary
-      `{'section': {'key': 'value'}}`
-    :param str environ: The prefix of the environment variables.
-    :param str ini: The path of the INI file.
     """
     readers: List[ReaderBase] = []
     for keyword, value in kwargs.items():
@@ -348,11 +363,11 @@ def load_readers_by_keyword(**kwargs: Any) -> List[ReaderBase]:
                 readers.append(ArgparseReader(args=value[0], mapping=value[1]))
             elif value.__class__.__name__ == 'Namespace':
                 readers.append(ArgparseReader(args=value))
-        elif keyword == 'dictionary':
+        elif keyword == 'dictionary' and isinstance(value, dict):
             readers.append(DictionaryReader(dictionary=value))
-        elif keyword == 'environ':
+        elif keyword == 'environ' and isinstance(value, str):
             readers.append(EnvironReader(prefix=value))
-        elif keyword == 'ini':
+        elif keyword == 'ini' and isinstance(value, str):
             readers.append(IniReader(path=value))
         elif keyword == 'spec':
             readers.append(SpecReader(spec=value))
@@ -366,26 +381,15 @@ class ConfigReader:
     Each keyword stands for a configuration reader class.
     The order of the keywords is important. The first keyword, more
     specifically the first reader class, overwrites the next ones.
-
-    :param tuple argparse: A tuple `(args, mapping)`.
-      `args`: The parsed `argparse` object (Namespace).
-      `mapping`: A dictionary like this one: `{'section.key': 'dest'}`. `dest`
-      are the propertiy name of the `args` object.
-      or only the `argparse` object (Namespace).
-    :param dict dictonary: A two dimensional nested dictionary
-      `{'section': {'key': 'value'}}`
-    :param str environ: The prefix of the environment variables.
-    :param str ini: The path of the INI file.
     """
 
     spec: Spec
     reader: ReaderBase
 
-    def __init__(self, spec: Spec = {}, **kwargs: str):
-        if spec:
-            readers = load_readers_by_keyword(**kwargs, spec=spec)
-        else:
-            readers = load_readers_by_keyword(**kwargs)
+    def __init__(self, spec: Spec = {}, **kwargs: Unpack[ReadersKwarg]):
+        kwargs['spec'] = spec
+
+        readers = load_readers_by_keyword(**kwargs)
         self.spec = spec
         """The specification dictionary. For more informations look at the
         class arguments of this class."""
