@@ -178,11 +178,11 @@ class TestClassIniReader(unittest.TestCase):
 
     def test_none(self) -> None:
         with self.assertRaises(conf2levels.IniReaderError):
-            IniReader(path=None)
+            IniReader(path=None)  # type: ignore
 
     def test_false(self) -> None:
         with self.assertRaises(conf2levels.IniReaderError):
-            IniReader(path=False)
+            IniReader(path=False)  # type: ignore
 
     def test_emtpy_string(self) -> None:
         with self.assertRaises(conf2levels.IniReaderError):

@@ -326,7 +326,7 @@ class ClassInterface:
         return ClassInterfaceKey(self._reader, section=name)
 
 
-class ReadersKwarg(TypedDict):
+class ReadersKwarg(TypedDict, total=False):
 
     argparse: Union[Tuple[argparse.Namespace, Mapping], argparse.Namespace]
     """A tuple `(args, mapping)`.
@@ -335,7 +335,7 @@ class ReadersKwarg(TypedDict):
       are the propertiy name of the `args` object.
       or only the `argparse` object (Namespace)."""
 
-    dictionary: int
+    dictionary: Dictionary
     """ A two dimensional nested dictionary
       `{'section': {'key': 'value'}}`"""
 
