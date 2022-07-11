@@ -1,22 +1,13 @@
-from conf2levels import __version__
-import os
-import unittest
 import argparse
+import os
 import tempfile
-
+import unittest
 
 import conf2levels
-from conf2levels import \
-    ArgparseReader, \
-    ConfigReader, \
-    ConfigValueError, \
-    DictionaryReader, \
-    EnvironReader, \
-    IniReader, \
-    load_readers_by_keyword, \
-    ReaderSelector, \
-    ReaderBase, \
-    validate_key
+from conf2levels import (ArgparseReader, ConfigReader, ConfigValueError,
+                         DictionaryReader, EnvironReader, IniReader,
+                         ReaderBase, ReaderSelector, __version__,
+                         load_readers_by_keyword, validate_key)
 
 FILES_DIR = os.path.join(os.path.dirname(__file__), 'files')
 
