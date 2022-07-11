@@ -120,8 +120,6 @@ Dictionary = Dict[str, Dict[str, Any]]
 
 class DictionaryReader(ReaderBase):
     """Useful for default values.
-
-    :param dictionary: A nested dictionary.
     """
 
     def __init__(self, dictionary: Dictionary):
@@ -212,8 +210,6 @@ class IniReader(ReaderBase):
 
 class SpecReader(ReaderBase):
     """Read the default values from the `spec` (specification) dictionary.
-
-    :param spec: The `spec` (specification) dictionary.
     """
 
     _spec: Spec
