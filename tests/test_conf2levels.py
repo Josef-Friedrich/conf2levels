@@ -28,20 +28,20 @@ ARGPARSER_NAMESPACE = parser.parse_args(['--baroque-name', 'Bach',
                                          '--classical-name', 'Mozart'])
 
 
-def test_version():
+def test_version() -> None:
     assert __version__ == '0.2.0'
 
 
 class TestFunctionValidateKey(unittest.TestCase):
 
-    def test_valid(self):
+    def test_valid(self) -> None:
         self.assertTrue(validate_key('test'))
         self.assertTrue(validate_key('test_1'))
         self.assertTrue(validate_key('1'))
         self.assertTrue(validate_key('a'))
         self.assertTrue(validate_key('ABC_abc_123'))
 
-    def test_invalid(self):
+    def test_invalid(self) -> None:
         with self.assertRaises(ValueError) as context:
             validate_key('l o l')
         self.assertEqual(
@@ -58,25 +58,25 @@ class TestFunctionValidateKey(unittest.TestCase):
 
 class FalseReader(ReaderBase):
 
-    def not_get(self):
+    def not_get(self) -> str:
         return 'It’s not get'
 
 
 class TestClassReaderBase(unittest.TestCase):
 
-    def test_exception(self):
+    def test_exception(self) -> None:
         with self.assertRaises(TypeError):
             FalseReader()  # pylint: disable=abstract-class-instantiated
 
 
 class TestClassArgparseReader(unittest.TestCase):
 
-    def test_method_get_without_mapping(self):
+    def test_method_get_without_mapping(self) -> None:
         argparse = ArgparseReader(args=ARGPARSER_NAMESPACE)
         self.assertEqual(argparse.get('Classical', 'name'), 'Mozart')
         self.assertEqual(argparse.get('Baroque', 'name'), 'Bach')
 
-    def test_method_get_with_mapping(self):
+    def test_method_get_with_mapping(self) -> None:
         argparse = ArgparseReader(
             args=ARGPARSER_NAMESPACE,
             mapping={
@@ -86,7 +86,7 @@ class TestClassArgparseReader(unittest.TestCase):
         self.assertEqual(argparse.get('Classical', 'name'), 'Mozart')
         self.assertEqual(argparse.get('Baroque', 'name'), 'Bach')
 
-    def test_exception(self):
+    def test_exception(self) -> None:
         argparse = ArgparseReader(
             args=ARGPARSER_NAMESPACE,
             mapping={
@@ -106,11 +106,11 @@ class TestClassDictionaryReader(unittest.TestCase):
 
     dictionary = {'Classical': {'name': 'Mozart'}}
 
-    def test_method_get(self):
+    def test_method_get(self) -> None:
         dictionary = DictionaryReader(dictionary=self.dictionary)
         self.assertEqual(dictionary.get('Classical', 'name'), 'Mozart')
 
-    def test_exception(self):
+    def test_exception(self) -> None:
         dictionary = DictionaryReader(dictionary=self.dictionary)
         with self.assertRaises(ConfigValueError):
             dictionary.get('Romantic', 'name')
@@ -118,14 +118,14 @@ class TestClassDictionaryReader(unittest.TestCase):
 
 class TestClassEnvironReader(unittest.TestCase):
 
-    def test_method_get(self):
+    def test_method_get(self) -> None:
         os.environ['AAA__bridge__ip'] = '1.2.3.4'
         os.environ['AAA__bridge__username'] = 'test'
         environ = EnvironReader(prefix='AAA')
         self.assertEqual(environ.get('bridge', 'ip'), '1.2.3.4')
         self.assertEqual(environ.get('bridge', 'username'), 'test')
 
-    def test_exception(self):
+    def test_exception(self) -> None:
         environ = EnvironReader(prefix='AAA')
         with self.assertRaises(ConfigValueError) as cm:
             environ.get('lol', 'lol')
@@ -137,13 +137,13 @@ class TestClassEnvironReader(unittest.TestCase):
 
 class TestClassEnvironWithoutPrefix(unittest.TestCase):
 
-    def test_method_get(self):
+    def test_method_get(self) -> None:
         os.environ['Avantgarde__name'] = 'Stockhausen'
         environ = EnvironReader()
         self.assertEqual(environ.get('Avantgarde', 'name'), 'Stockhausen')
         del os.environ['Avantgarde__name']
 
-    def test_exception(self):
+    def test_exception(self) -> None:
         environ = EnvironReader()
         with self.assertRaises(ConfigValueError) as cm:
             environ.get('xxxAvantgarde', 'xxxname')
@@ -155,12 +155,12 @@ class TestClassEnvironWithoutPrefix(unittest.TestCase):
 
 class TestClassIniReader(unittest.TestCase):
 
-    def test_method_get(self):
+    def test_method_get(self) -> None:
         ini = IniReader(path=INI_FILE)
         self.assertEqual(ini.get('Classical', 'name'), 'Mozart')
         self.assertEqual(ini.get('Romantic', 'name'), 'Schumann')
 
-    def test_exception(self):
+    def test_exception(self) -> None:
         ini = IniReader(path=INI_FILE)
         with self.assertRaises(ConfigValueError) as context:
             ini.get('lol', 'lol')
@@ -170,21 +170,21 @@ class TestClassIniReader(unittest.TestCase):
             '“lol”).',
         )
 
-    def test_non_existent_ini_file(self):
+    def test_non_existent_ini_file(self) -> None:
         tmp_path = tempfile.mkdtemp()
         non_existent = os.path.join(tmp_path, 'xxx')
         with self.assertRaises(conf2levels.IniReaderError):
             IniReader(path=non_existent)
 
-    def test_none(self):
+    def test_none(self) -> None:
         with self.assertRaises(conf2levels.IniReaderError):
             IniReader(path=None)
 
-    def test_false(self):
+    def test_false(self) -> None:
         with self.assertRaises(conf2levels.IniReaderError):
             IniReader(path=False)
 
-    def test_emtpy_string(self):
+    def test_emtpy_string(self) -> None:
         with self.assertRaises(conf2levels.IniReaderError):
             IniReader(path='')
 
@@ -194,16 +194,16 @@ class TestClassIniReader(unittest.TestCase):
 
 class TestClassReaderSelector(unittest.TestCase):
 
-    def test_ini_first(self):
+    def test_ini_first(self) -> None:
         reader = ReaderSelector(IniReader(INI_FILE),
                                 EnvironReader(prefix='XXX'))
         self.assertEqual(reader.get('Classical', 'name'), 'Mozart')
 
-    def test_environ_first(self):
+    def test_environ_first(self) -> None:
         reader = ReaderSelector(EnvironReader('XXX'), IniReader(INI_FILE))
         self.assertEqual(reader.get('Baroque', 'name'), 'Bach')
 
-    def test_exception(self):
+    def test_exception(self) -> None:
         reader = ReaderSelector(EnvironReader('XXX'), IniReader(INI_FILE))
         with self.assertRaises(ValueError) as context:
             reader.get('lol', 'lol')
@@ -216,21 +216,21 @@ class TestClassReaderSelector(unittest.TestCase):
 
 class TestFunctionLoadReadersByKeyword(unittest.TestCase):
 
-    def test_without_keywords_arguments(self):
+    def test_without_keywords_arguments(self) -> None:
         with self.assertRaises(TypeError):
             load_readers_by_keyword(INI_FILE, 'XXX')  # pylint: disable=E1121
 
-    def test_order_ini_environ(self):
+    def test_order_ini_environ(self) -> None:
         readers = load_readers_by_keyword(ini=INI_FILE, environ='XXX')
         self.assertEqual(readers[0].__class__.__name__, 'IniReader')
         self.assertEqual(readers[1].__class__.__name__, 'EnvironReader')
 
-    def test_order_environ_ini(self):
+    def test_order_environ_ini(self) -> None:
         readers = load_readers_by_keyword(environ='XXX', ini=INI_FILE, )
         self.assertEqual(readers[0].__class__.__name__, 'EnvironReader')
         self.assertEqual(readers[1].__class__.__name__, 'IniReader')
 
-    def test_argparse_single_arguemnt(self):
+    def test_argparse_single_arguemnt(self) -> None:
         readers = load_readers_by_keyword(argparse=ARGPARSER_NAMESPACE)
         self.assertEqual(readers[0].__class__.__name__, 'ArgparseReader')
 
@@ -240,7 +240,7 @@ class TestFunctionLoadReadersByKeyword(unittest.TestCase):
 
 class TestClassConfigReader(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         # argparser
         parser = argparse.ArgumentParser()
         parser.add_argument('--common-key')
@@ -266,11 +266,11 @@ class TestClassConfigReader(unittest.TestCase):
         # ini
         self.ini = os.path.join(FILES_DIR, 'integration.ini')
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         del os.environ['YYY__common__key']
         del os.environ['YYY__specific__environ']
 
-    def test_argparse_first(self):
+    def test_argparse_first(self) -> None:
         conf2levels = ConfigReader(
             argparse=self.argparse,
             dictionary=self.dictionary,
@@ -280,7 +280,7 @@ class TestClassConfigReader(unittest.TestCase):
         config = conf2levels.get_class_interface()
         self.assertEqual(config.common.key, 'argparse')
 
-    def test_argparse_empty(self):
+    def test_argparse_empty(self) -> None:
         parser = argparse.ArgumentParser()
         parser.add_argument('--empty-key')
         args = parser.parse_args([])
@@ -291,7 +291,7 @@ class TestClassConfigReader(unittest.TestCase):
         config = conf2levels.get_class_interface()
         self.assertEqual(config.empty.key, 'from_dict')
 
-    def test_dictionary_first(self):
+    def test_dictionary_first(self) -> None:
         conf2levels = ConfigReader(
             dictionary=self.dictionary,
             argparse=self.argparse,
@@ -301,7 +301,7 @@ class TestClassConfigReader(unittest.TestCase):
         config = conf2levels.get_class_interface()
         self.assertEqual(config.common.key, 'dictionary')
 
-    def test_environ_first(self):
+    def test_environ_first(self) -> None:
         conf2levels = ConfigReader(
             environ=self.environ,
             argparse=self.argparse,
@@ -311,7 +311,7 @@ class TestClassConfigReader(unittest.TestCase):
         config = conf2levels.get_class_interface()
         self.assertEqual(config.common.key, 'environ')
 
-    def test_ini_first(self):
+    def test_ini_first(self) -> None:
         conf2levels = ConfigReader(
             ini=self.ini,
             argparse=self.argparse,
@@ -321,7 +321,7 @@ class TestClassConfigReader(unittest.TestCase):
         config = conf2levels.get_class_interface()
         self.assertEqual(config.common.key, 'ini')
 
-    def test_specifiy_values(self):
+    def test_specifiy_values(self) -> None:
         conf2levels = ConfigReader(
             argparse=self.argparse,
             dictionary=self.dictionary,
@@ -334,7 +334,7 @@ class TestClassConfigReader(unittest.TestCase):
         self.assertEqual(config.specific.environ, 'environ')
         self.assertEqual(config.specific.ini, 'ini')
 
-    def test_method_get_class_interface(self):
+    def test_method_get_class_interface(self) -> None:
         conf2levels = ConfigReader(
             argparse=self.argparse,
             dictionary=self.dictionary,
@@ -347,7 +347,7 @@ class TestClassConfigReader(unittest.TestCase):
         self.assertEqual(config.specific.environ, 'environ')
         self.assertEqual(config.specific.ini, 'ini')
 
-    def test_method_get_dictionary_interface(self):
+    def test_method_get_dictionary_interface(self) -> None:
         conf2levels = ConfigReader(
             argparse=self.argparse,
             dictionary=self.dictionary,
@@ -360,7 +360,7 @@ class TestClassConfigReader(unittest.TestCase):
         self.assertEqual(config['specific']['environ'], 'environ')
         self.assertEqual(config['specific']['ini'], 'ini')
 
-    def test_method_check_section(self):
+    def test_method_check_section(self) -> None:
         dictionary = {
             'missing_key': {
                 'key': 'value'
@@ -404,7 +404,7 @@ class TestClassConfigReader(unittest.TestCase):
         with self.assertRaises(ValueError):
             conf2levels.check_section('empty')
 
-    def test_spec_defaults(self):
+    def test_spec_defaults(self) -> None:
         dictionary = {
             'no_default': {
                 'key': 'No default value',
@@ -431,7 +431,7 @@ class TestClassConfigReader(unittest.TestCase):
         self.assertEqual(config.no_default.key, 'No default value')
         self.assertEqual(config.default.key, 123)
 
-    def test_method_spec_to_argparse(self):
+    def test_method_spec_to_argparse(self) -> None:
         spec = {
             'email': {
                 'smtp_login': {
@@ -451,48 +451,48 @@ class TestClassConfigReader(unittest.TestCase):
 
 class TestTypes(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         conf2levels = ConfigReader(ini=os.path.join(FILES_DIR, 'types.ini'))
         self.config = conf2levels.get_class_interface()
 
-    def test_int(self):
+    def test_int(self) -> None:
         self.assertEqual(self.config.types.int, 1)
 
-    def test_float(self):
+    def test_float(self) -> None:
         self.assertEqual(self.config.types.float, 1.1)
 
-    def test_str(self):
+    def test_str(self) -> None:
         self.assertEqual(self.config.types.str, 'Some text')
 
-    def test_list(self):
+    def test_list(self) -> None:
         self.assertEqual(self.config.types.list, [1, 2, 3])
 
-    def test_tuple(self):
+    def test_tuple(self) -> None:
         self.assertEqual(self.config.types.tuple, (1, 2, 3))
 
-    def test_dict(self):
+    def test_dict(self) -> None:
         self.assertEqual(self.config.types.dict, {'one': 1, 'two': 2})
 
-    def test_code(self):
+    def test_code(self) -> None:
         self.assertEqual(self.config.types.code, 'print(\'lol\')')
 
-    def test_invalid_code(self):
+    def test_invalid_code(self) -> None:
         self.assertEqual(self.config.types.invalid_code, 'print(\'lol)\'')
 
-    def test_bool(self):
+    def test_bool(self) -> None:
         self.assertEqual(self.config.types.bool, True)
 
-    def test_empty_string(self):
+    def test_empty_string(self) -> None:
         self.assertEqual(self.config.types.empty_str, '')
 
-    def test_none(self):
+    def test_none(self) -> None:
         self.assertEqual(self.config.types.none, None)
 
-    def test_zero(self):
+    def test_zero(self) -> None:
         self.assertEqual(self.config.types.zero, 0)
 
-    def test_false(self):
+    def test_false(self) -> None:
         self.assertEqual(self.config.types.false, False)
 
-    def test_false_str(self):
+    def test_false_str(self) -> None:
         self.assertEqual(self.config.types.false_str, 'false')

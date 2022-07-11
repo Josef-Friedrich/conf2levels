@@ -35,7 +35,7 @@ def validate_key(key: str) -> bool:
 class ReaderBase(object, metaclass=abc.ABCMeta):
     """Base class for all readers"""
 
-    def _exception(self, msg: str):
+    def _exception(self, msg: str) -> None:
         """:raises: ConfigValueError"""
         raise ConfigValueError(msg)
 
@@ -251,10 +251,10 @@ class ReaderSelector(ReaderBase):
         """A list of readers."""
 
     @staticmethod
-    def _validate_key(key: str):
+    def _validate_key(key: str) -> bool:
         return validate_key(key)
 
-    def get(self, section: str, key: str):
+    def get(self, section: str, key: str) -> Any:
         """
         Get a configuration value stored under a section and a key.
 
@@ -291,7 +291,7 @@ class DictionaryInterfaceKey:
         self._reader = reader
         self._section = section
 
-    def __getitem__(self, name: str):
+    def __getitem__(self, name: str) -> Any:
         return auto_type(self._reader.get(self._section, name))
 
 
@@ -300,7 +300,7 @@ class DictionaryInterface:
     def __init__(self, reader: ReaderBase):
         self._reader = reader
 
-    def __getitem__(self, name: str):
+    def __getitem__(self, name: str) -> DictionaryInterfaceKey:
         return DictionaryInterfaceKey(self._reader, section=name)
 
 
@@ -310,7 +310,7 @@ class ClassInterfaceKey:
         self._reader = reader
         self._section = section
 
-    def __getattr__(self, name: str):
+    def __getattr__(self, name: str) -> Any:
         return auto_type(self._reader.get(self._section, name))
 
 
@@ -319,7 +319,7 @@ class ClassInterface:
     def __init__(self, reader: ReaderBase):
         self._reader = reader
 
-    def __getattr__(self, name: str):
+    def __getattr__(self, name: str) -> ClassInterfaceKey:
         return ClassInterfaceKey(self._reader, section=name)
 
 
@@ -381,7 +381,7 @@ class ConfigReader:
     spec: Spec
     reader: ReaderBase
 
-    def __init__(self, spec: Spec = {}, **kwargs):
+    def __init__(self, spec: Spec = {}, **kwargs: str):
         if spec:
             readers = load_readers_by_keyword(**kwargs, spec=spec)
         else:
