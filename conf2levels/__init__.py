@@ -8,7 +8,7 @@ import typing
 from typing import Any, Dict, List, Optional, Tuple, TypedDict, Union
 from typing_extensions import Unpack
 
-__version__ = '0.2.0'
+__version__ = '0.0.0'
 
 
 class ConfigValueError(Exception):

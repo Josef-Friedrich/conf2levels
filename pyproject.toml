@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "conf2levels"
-version = "0.2.0"
+version = "0.0.0"
 description = "A configuration reader which reads values stored in two key levels. The first key level is named “section” and the second level “key”."
 authors = ["Josef Friedrich <josef@friedrich.rocks>"]
 readme = "README.rst"
@@ -15,5 +15,10 @@ mypy = "^0.961"
 autopep8 = "^1.6.0"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry>=1.2.0b2", "poetry-dynamic-versioning-plugin"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
