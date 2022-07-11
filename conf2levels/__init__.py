@@ -80,10 +80,6 @@ class ArgparseReader(ReaderBase):
     `section_key`). By multi word section you have to specify a mapping
     (`{'my_section.key': 'my_section_key'}`). Without a mapping all sections
     and keys are convert into lowercase (`Section` = `section`).
-
-    :param args: The parsed `argparse` object.
-    :param mapping: A dictionary like this one: `{'section.key': 'dest'}`.
-      `dest` is the property name of the `args` object.
     """
 
     _mapping: Mapping
