@@ -5,10 +5,12 @@ import configparser
 import os
 import re
 import typing
+from importlib import metadata
 from typing import Any, Dict, List, Optional, Tuple, TypedDict, Union
+
 from typing_extensions import Unpack
 
-__version__ = '0.0.0'
+__version__: str = metadata.version('conf2levels')
 
 
 class ConfigValueError(Exception):
@@ -340,7 +342,8 @@ class ReadersKwarg(TypedDict, total=False):
     spec: Spec
 
 
-def load_readers_by_keyword(**kwargs: Unpack[ReadersKwarg]) -> List[ReaderBase]:
+def load_readers_by_keyword(
+        **kwargs: Unpack[ReadersKwarg]) -> List[ReaderBase]:
     """Available readers: `argparse`, `dictionary`, `environ`, `ini`.
 
     The arguments of this class have to be specified as keyword arguments.
