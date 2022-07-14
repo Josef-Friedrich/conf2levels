@@ -4,6 +4,10 @@ version = "0.4.0"
 description = "A configuration reader which reads values stored in two key levels. The first key level is named “section” and the second level “key”."
 authors = ["Josef Friedrich <josef@friedrich.rocks>"]
 readme = "README.rst"
+license = 'MIT'
+classifiers = [
+  'License :: OSI Approved :: MIT License',
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
