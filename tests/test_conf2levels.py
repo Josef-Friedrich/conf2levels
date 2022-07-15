@@ -3,11 +3,11 @@ import os
 import tempfile
 import unittest
 
-import conf2levels
 from conf2levels import (ArgparseReader, ConfigReader, ConfigValueError,
                          DictionaryReader, EnvironReader, IniReader,
                          ReaderBase, ReaderSelector, __version__,
                          load_readers_by_keyword, validate_key)
+from conf2levels.exceptions import IniReaderError
 
 FILES_DIR = os.path.join(os.path.dirname(__file__), 'files')
 
@@ -29,7 +29,7 @@ ARGPARSER_NAMESPACE = parser.parse_args(['--baroque-name', 'Bach',
 
 
 def test_version() -> None:
-    assert __version__ == '0.2.0'
+    assert __version__ == '0.4.0'
 
 
 class TestFunctionValidateKey(unittest.TestCase):
@@ -173,19 +173,19 @@ class TestClassIniReader(unittest.TestCase):
     def test_non_existent_ini_file(self) -> None:
         tmp_path = tempfile.mkdtemp()
         non_existent = os.path.join(tmp_path, 'xxx')
-        with self.assertRaises(conf2levels.IniReaderError):
+        with self.assertRaises(IniReaderError):
             IniReader(path=non_existent)
 
     def test_none(self) -> None:
-        with self.assertRaises(conf2levels.IniReaderError):
+        with self.assertRaises(IniReaderError):
             IniReader(path=None)  # type: ignore
 
     def test_false(self) -> None:
-        with self.assertRaises(conf2levels.IniReaderError):
+        with self.assertRaises(IniReaderError):
             IniReader(path=False)  # type: ignore
 
     def test_emtpy_string(self) -> None:
-        with self.assertRaises(conf2levels.IniReaderError):
+        with self.assertRaises(IniReaderError):
             IniReader(path='')
 
 
