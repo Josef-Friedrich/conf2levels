@@ -31,3 +31,73 @@ INI file (`ini`):
 
     [section]
     key = value
+
+
+.. code:: python
+
+    CONF_DEFAULTS = {
+        'email': {
+            'subject_prefix': 'command_watcher',
+        },
+        'nsca': {
+            'port': 5667,
+        },
+    }
+
+    CONFIG_READER_SPEC: Spec = {
+        'email': {
+            'from_addr': {
+                'description': 'The email address of the sender.',
+            },
+            'to_addr': {
+                'description': 'The email address of the recipient.',
+                'not_empty': True,
+            },
+            'to_addr_critical': {
+                'description': 'The email address of the recipient to send '
+                              'critical messages to.',
+                'default': None,
+            },
+            'smtp_login': {
+                'description': 'The SMTP login name.',
+                'not_empty': True,
+            },
+            'smtp_password': {
+                'description': 'The SMTP password.',
+                'not_empty': True,
+            },
+            'smtp_server': {
+                'description': 'The URL of the SMTP server, for example: '
+                              '`smtp.example.com:587`.',
+                'not_empty': True,
+            },
+        },
+        'icinga': {
+            'url': {
+                'description': 'The HTTP URL. /v1/actions/process-check-result '
+                              'is appended.',
+                'not_empty': True,
+            },
+            'user': {
+                'description': 'The user for the HTTP authentification.',
+                'not_empty': True,
+            },
+            'password': {
+                'description': 'The password for the HTTP authentification.',
+                'not_empty': True,
+            },
+        },
+        'beep': {
+            'activated': {
+                'description': 'Activate the beep channel to report auditive '
+                              'messages.',
+                'default': False,
+            }
+        }
+    }
+
+    config_reader = ConfigReader(
+        spec=CONFIG_READER_SPEC,
+        ini=config_file,
+        dictionary=CONF_DEFAULTS,
+    )
