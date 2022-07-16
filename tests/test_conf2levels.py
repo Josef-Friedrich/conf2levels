@@ -5,7 +5,7 @@ import unittest
 
 from conf2levels import (ArgparseReader, ConfigReader, ConfigValueError,
                          DictionaryReader, EnvironReader, IniReader,
-                         ReaderBase, ReaderSelector, __version__,
+                         ReaderBase, ReaderSelector,
                          load_readers_by_keyword, validate_key)
 from conf2levels.exceptions import IniReaderError
 
@@ -26,10 +26,6 @@ parser.add_argument('--classical-name')
 parser.add_argument('--baroque-name')
 ARGPARSER_NAMESPACE = parser.parse_args(['--baroque-name', 'Bach',
                                          '--classical-name', 'Mozart'])
-
-
-def test_version() -> None:
-    assert __version__ == '0.4.0'
 
 
 class TestFunctionValidateKey(unittest.TestCase):
