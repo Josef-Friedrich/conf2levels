@@ -1,3 +1,7 @@
+.. image:: https://github.com/Josef-Friedrich/conf2levels/actions/workflows/tests.yml/badge.svg
+    :target: https://github.com/Josef-Friedrich/conf2levels/actions/workflows/tests.yml
+    :alt: Tests
+
 A configuration reader which reads values stored in two key levels.
 The first key level is named ``section`` and the second level ``key``.
 
