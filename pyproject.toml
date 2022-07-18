@@ -6,7 +6,7 @@ authors = ["Josef Friedrich <josef@friedrich.rocks>"]
 readme = "README.rst"
 license = "MIT"
 classifiers = [
-  "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: MIT License",
 ]
 
 [tool.poetry.dependencies]
