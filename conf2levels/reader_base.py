@@ -13,4 +13,4 @@ class ReaderBase(object, metaclass=ABCMeta):
 
     @abstractmethod
     def get(self, section: str, key: str) -> Any:
-        raise NotImplementedError('A reader class must have a `get` method.')
+        raise NotImplementedError("A reader class must have a `get` method.")

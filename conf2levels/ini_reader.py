@@ -16,8 +16,7 @@ class IniReader(ReaderBase):
         self._config = ConfigParser()
         if not path or not os.path.exists(path):
             raise IniReaderError(
-                'Ini configuration path “{}” couldn’t be opened.'
-                .format(path)
+                "Ini configuration path “{}” couldn’t be opened.".format(path)
             )
         self._config.read_file(open(path))
 
@@ -35,5 +34,7 @@ class IniReader(ReaderBase):
         try:
             return self._config[section][key]
         except KeyError:
-            self._exception('Configuration value could not be found '
-                            '(section “{}” key “{}”).'.format(section, key))
+            self._exception(
+                "Configuration value could not be found "
+                "(section “{}” key “{}”).".format(section, key)
+            )

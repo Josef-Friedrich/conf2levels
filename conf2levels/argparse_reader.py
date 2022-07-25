@@ -1,4 +1,3 @@
-
 from argparse import Namespace
 from typing import Any
 
@@ -33,17 +32,18 @@ class ArgparseReader(ReaderBase):
 
         :return: The configuration value stored under a section and a key.
         """
-        mapping_key = '{}.{}'.format(section, key)
+        mapping_key = "{}.{}".format(section, key)
         if mapping_key in self._mapping:
             argparse_dest = self._mapping[mapping_key]
         else:
-            argparse_dest = '{}_{}'.format(section, key).lower()
+            argparse_dest = "{}_{}".format(section, key).lower()
 
         if hasattr(self._args, argparse_dest):
             value = getattr(self._args, argparse_dest)
             if value is not None:
                 return value
 
-        self._exception('Configuration value could not be found by '
-                        'Argparse (section “{}” key “{}”).'
-                        .format(section, key))
+        self._exception(
+            "Configuration value could not be found by "
+            "Argparse (section “{}” key “{}”).".format(section, key)
+        )

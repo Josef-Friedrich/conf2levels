@@ -26,9 +26,9 @@ class EnvironReader(ReaderBase):
         :return: The configuration value stored under a section and a key.
         """
         if self._prefix:
-            key = '{}__{}__{}'.format(self._prefix, section, key)
+            key = "{}__{}__{}".format(self._prefix, section, key)
         else:
-            key = '{}__{}'.format(section, key)
+            key = "{}__{}".format(section, key)
         if key in os.environ:
             return os.environ[key]
-        self._exception('Environment variable not found: {}'.format(key))
+        self._exception("Environment variable not found: {}".format(key))

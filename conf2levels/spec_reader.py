@@ -5,8 +5,7 @@ from .types import Spec
 
 
 class SpecReader(ReaderBase):
-    """Read the default values from the `spec` (specification) dictionary.
-    """
+    """Read the default values from the `spec` (specification) dictionary."""
 
     _spec: Spec
 
@@ -25,7 +24,9 @@ class SpecReader(ReaderBase):
         :return: The configuration value stored under a section and a key.
         """
         try:
-            return self._spec[section][key]['default']
+            return self._spec[section][key]["default"]
         except KeyError:
-            self._exception('Configuration value could not be found '
-                            '(section “{}” key “{}”).'.format(section, key))
+            self._exception(
+                "Configuration value could not be found "
+                "(section “{}” key “{}”).".format(section, key)
+            )

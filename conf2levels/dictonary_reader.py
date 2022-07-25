@@ -5,8 +5,7 @@ from .types import Dictionary
 
 
 class DictionaryReader(ReaderBase):
-    """Useful for default values.
-    """
+    """Useful for default values."""
 
     def __init__(self, dictionary: Dictionary):
         self._dictionary = dictionary
@@ -26,6 +25,5 @@ class DictionaryReader(ReaderBase):
             return self._dictionary[section][key]
         except KeyError:
             self._exception(
-                'In the dictionary is no value at dict[{}][{}]'
-                .format(section, key)
+                "In the dictionary is no value at dict[{}][{}]".format(section, key)
             )
