@@ -1,3 +1,7 @@
+.. image:: http://img.shields.io/pypi/v/conf2levels.svg
+    :target: https://pypi.org/project/conf2levels
+    :alt: This package on the Python Package Index
+
 .. image:: https://github.com/Josef-Friedrich/conf2levels/actions/workflows/tests.yml/badge.svg
     :target: https://github.com/Josef-Friedrich/conf2levels/actions/workflows/tests.yml
     :alt: Tests
