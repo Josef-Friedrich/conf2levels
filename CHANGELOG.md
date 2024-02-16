@@ -8,13 +8,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <!-- insertion marker -->
 ## Unreleased
 
-<small>[Compare with latest](https://github.com/Josef-Friedrich/conf2levels/compare/v0.5.0...HEAD)</small>
+<small>[Compare with latest](https://github.com/Josef-Friedrich/conf2levels/compare/v0.5.1...HEAD)</small>
+<!-- insertion marker -->
+
+## [v0.5.1](https://github.com/Josef-Friedrich/conf2levels/releases/tag/v0.5.1) - 2023-02-16
+
+<small>[Compare with v0.5.0](https://github.com/Josef-Friedrich/conf2levels/compare/v0.5.0...0.5.1)</small>
+
+### Changed
+
+- Convert tests to pytest
 
 ### Fixed
 
 - Fix tests ([d094fac](https://github.com/Josef-Friedrich/conf2levels/commit/d094fac1e9a68e5c4e6318e9920d63fa64a1ce13) by Josef Friedrich).
 
-<!-- insertion marker -->
 ## [v0.5.0](https://github.com/Josef-Friedrich/conf2levels/releases/tag/v0.5.0) - 2022-07-16
 
 <small>[Compare with v0.4.0](https://github.com/Josef-Friedrich/conf2levels/compare/v0.4.0...v0.5.0)</small>
