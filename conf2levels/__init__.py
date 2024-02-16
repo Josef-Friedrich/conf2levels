@@ -43,8 +43,9 @@ class ReaderSelector(ReaderBase):
             except ConfigValueError:
                 pass
         raise ValueError(
-            "Configuration value could not be found "
-            "(section “{}” key “{}”).".format(section, key)
+            "Configuration value could not be found " "(section “{}” key “{}”).".format(
+                section, key
+            )
         )
 
 
@@ -96,7 +97,6 @@ class ClassInterface:
 
 
 class ReadersKwarg(TypedDict, total=False):
-
     argparse: Union[Tuple[argparse.Namespace, Mapping], argparse.Namespace]
     """A tuple `(args, mapping)`.
       `args`: The parsed `argparse` object (Namespace).
